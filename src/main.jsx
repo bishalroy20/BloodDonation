@@ -8,6 +8,8 @@ import PublicRoute from './Layout/PublicRoute.jsx';
 import PrivateRoute from './Layout/PrivateRoute.jsx';
 import Home from './Components/Home/Home.jsx';
 import AuthProvider from './Contexts/AuthProvider.jsx';
+import Register from './Components/Home/Register.jsx';
+import Login from './Components/Home/Login.jsx';
 
 
 const router = createBrowserRouter([
@@ -22,7 +24,8 @@ const router = createBrowserRouter([
       {
         element: <PublicRoute />,
         children: [
-          
+          {path : '/register' , element : <Register />},
+          {path : '/login' , element : <Login />},
         ],
       },
 

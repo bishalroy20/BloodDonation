@@ -29,8 +29,8 @@ export default function Navbar() {
           <Link to="" className="hover:text-gray-200">Admin</Link>
           {!user ? (
             <>
-              <Link to="" className="hover:text-gray-200">Login</Link>
-              <Link to="" className="hover:text-gray-200">Register</Link>
+              <Link to="/login" className="hover:text-gray-200">Login</Link>
+              <Link to="/register" className="hover:text-gray-200">Register</Link>
             </>
           ) : (
             <button onClick={signOutUser} className="hover:text-gray-200">Logout</button>
@@ -47,8 +47,8 @@ export default function Navbar() {
           <Link to="" onClick={() => setIsOpen(false)}>Admin</Link>
           {!user ? (
             <>
-              <Link to="" onClick={() => setIsOpen(false)}>Login</Link>
-              <Link to="" onClick={() => setIsOpen(false)}>Register</Link>
+              <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
+              <Link to="/register" onClick={() => setIsOpen(false)}>Register</Link>
             </>
           ) : (
             <button onClick={() => { signOutUser(); setIsOpen(false); }}>Logout</button>
