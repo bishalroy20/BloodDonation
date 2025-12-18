@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👁 toggle state
+  const [showPassword, setShowPassword] = useState(false); //  toggle state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,7 +28,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen border-gray-100">
-      <div className=" shadow-lg rounded-lg p-8 w-full max-w-md bg-red-200">
+      <div className=" shadow-lg rounded-lg p-8 w-full max-w-md bg-red-300">
         <h2 className="text-2xl font-bold text-center text-red-600 mb-6">🔑 Login</h2>
         {msg && (
           <p className="text-center mb-4 text-sm font-medium text-red-500">{msg}</p>

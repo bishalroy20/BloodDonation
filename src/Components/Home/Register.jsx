@@ -92,9 +92,9 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-red-500 to-pink-600">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+      <div className="bg-red-300 shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-red-600 mb-6">📝 Register</h2>
         {msg && <p className="text-center mb-4 text-sm font-medium text-red-500">{msg}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">

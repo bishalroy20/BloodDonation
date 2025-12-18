@@ -23,7 +23,7 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden sm:flex space-x-6">
-          <Link to="" className="hover:text-gray-200">Home</Link>
+          <Link to="/" className="hover:text-gray-200">Home</Link>
           <Link to="" className="hover:text-gray-200">Requests</Link>
           <Link to="" className="hover:text-gray-200">Volunteer</Link>
           <Link to="" className="hover:text-gray-200">Admin</Link>
@@ -41,7 +41,7 @@ export default function Navbar() {
       {/* Mobile dropdown */}
       {isOpen && (
         <div className="sm:hidden px-4 pb-4 space-y-2">
-          <Link to="" onClick={() => setIsOpen(false)}>Home</Link>
+          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
           <Link to="" onClick={() => setIsOpen(false)}>Requests</Link>
           <Link to="" onClick={() => setIsOpen(false)}>Volunteer</Link>
           <Link to="" onClick={() => setIsOpen(false)}>Admin</Link>
