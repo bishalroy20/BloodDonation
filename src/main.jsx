@@ -56,8 +56,9 @@ const router = createBrowserRouter([
               { path: "create-donation-request", element: <CreateDonationRequest /> },
 
               // Admin only
+              { path: "all-users", element: <AllUsersPage /> },
               { path: "admin", element: <AdminRoute><AdminHome /></AdminRoute> },
-              { path: "all-users", element: <AdminRoute><AllUsersPage /></AdminRoute> },
+              
 
               // Volunteer + Admin can see requests
               {

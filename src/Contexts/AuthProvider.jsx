@@ -7,10 +7,12 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.init";
-import { AuthContext } from "./AuthContext"; // keep your AuthContext file
+import { AuthContext } from "./AuthContext";
+import axios from "axios";
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);       // Firebase user
+  const [profile, setProfile] = useState(null); // Backend profile (role, status, etc.)
   const [loading, setLoading] = useState(true);
 
   const createUser = (email, password) => {
@@ -29,10 +31,25 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        try {
+          // ✅ Fetch profile from backend using Firebase UID
+          const res = await axios.get(`http://localhost:5000/api/users/${currentUser.uid}`);
+          setProfile(res.data); // should include { name, email, role, status }
+        } catch (err) {
+          console.error("Failed to load profile:", err);
+          setProfile(null);
+        }
+      } else {
+        setProfile(null);
+      }
+
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -41,6 +58,7 @@ const AuthProvider = ({ children }) => {
     signInUser,
     signOutUser,
     user,
+    profile,   // ✅ expose profile
     loading,
   };
 
