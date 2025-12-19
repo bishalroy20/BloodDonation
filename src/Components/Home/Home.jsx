@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from "react";
+// src/pages/Home.jsx
 
-const Home = () => {
+import Banner from "./Banner";
+import ContactUs from "./ContactUs";
+import Featured from "./Featured";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+
+export default function Home() {
   return (
-    <div>
-      {/* <ToastContainer /> */}
-
-      <h1>this is home</h1>
+    <div className="min-h-screen flex flex-col">
+      
+      <main className="flex-1">
+        <Banner />
+        <Featured />
+        <ContactUs />
+      </main>
+      
     </div>
   );
-};
-
-export default Home;
+}

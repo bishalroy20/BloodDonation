@@ -6,7 +6,7 @@ const PublicRoute = () => {
   const { user, loading } = useContext(AuthContext);
 
 
-  return user ? <Navigate to="/profile" replace /> : <Outlet />;
+  return user ? <Navigate to="/dashboard/profile" replace /> : <Outlet />;
 };
 
 export default PublicRoute;

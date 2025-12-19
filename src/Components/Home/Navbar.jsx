@@ -5,53 +5,93 @@ import { useAuth } from "../../Contexts/AuthProvider";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, signOutUser } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { user, profile, signOutUser } = useAuth();
 
   return (
     <nav className="bg-red-600 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
         {/* Logo */}
-        <Link to="" className="text-xl font-bold">🩸 Blood Donation</Link>
+        <Link to="/" className="text-xl font-bold">🩸 Blood Donation</Link>
 
-        {/* Hamburger for mobile */}
+        {/* Desktop links */}
+        <div className="hidden sm:flex items-center space-x-6">
+          <Link to="/requests" className="hover:text-gray-200">Donation requests</Link>
+
+          {!user ? (
+            <>
+              <Link to="/login" className="hover:text-gray-200">Login</Link>
+              <Link to="/register" className="hover:text-gray-200">Join as donor</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/funding" className="hover:text-gray-200">Funding</Link>
+
+              {/* Avatar dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setMenuOpen((v) => !v)}
+                  className="flex items-center gap-2 bg-red-700 px-3 py-1 rounded"
+                >
+                  <img
+                    src={profile?.avatarUrl || "https://ui-avatars.com/api/?name=User"}
+                    alt="avatar"
+                    className="w-6 h-6 rounded-full"
+                  />
+                  <span className="text-sm">{profile?.name || user?.email}</span>
+                </button>
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-md z-20">
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                      onClick={() => { signOutUser(); setMenuOpen(false); }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Mobile hamburger */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="sm:hidden p-2 rounded-md focus:outline-none"
         >
           {isOpen ? "✖" : "☰"}
         </button>
-
-        {/* Desktop links */}
-        <div className="hidden sm:flex space-x-6">
-          <Link to="/" className="hover:text-gray-200">Home</Link>
-          <Link to="" className="hover:text-gray-200">Requests</Link>
-          <Link to="" className="hover:text-gray-200">Volunteer</Link>
-          <Link to="" className="hover:text-gray-200">Admin</Link>
-          {!user ? (
-            <>
-              <Link to="/login" className="hover:text-gray-200">Login</Link>
-              <Link to="/register" className="hover:text-gray-200">Register</Link>
-            </>
-          ) : (
-            <button onClick={signOutUser} className="hover:text-gray-200">Logout</button>
-          )}
-        </div>
       </div>
 
       {/* Mobile dropdown */}
       {isOpen && (
         <div className="sm:hidden px-4 pb-4 space-y-2">
-          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link to="" onClick={() => setIsOpen(false)}>Requests</Link>
-          <Link to="" onClick={() => setIsOpen(false)}>Volunteer</Link>
-          <Link to="" onClick={() => setIsOpen(false)}>Admin</Link>
+          <Link to="/requests" onClick={() => setIsOpen(false)}>Donation requests</Link>
+
           {!user ? (
             <>
               <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
-              <Link to="/register" onClick={() => setIsOpen(false)}>Register</Link>
+              <Link to="/register" onClick={() => setIsOpen(false)}>Join as donor</Link>
             </>
           ) : (
-            <button onClick={() => { signOutUser(); setIsOpen(false); }}>Logout</button>
+            <>
+              <Link to="/funding" onClick={() => setIsOpen(false)}>Funding</Link>
+              <Link to="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link>
+              <button
+                onClick={() => { signOutUser(); setIsOpen(false); }}
+                className="block w-full text-left"
+              >
+                Logout
+              </button>
+            </>
           )}
         </div>
       )}

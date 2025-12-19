@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Firebase/firebase.init";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -16,15 +16,29 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, form.email, form.password);
-      setMsg("Login successful!");
-      navigate("/"); // redirect to home
-    } catch {
-      setMsg("Invalid email or password");
-    }
-  };
+  e.preventDefault();
+  try {
+    // Firebase login
+    const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
+    const user = userCredential.user;
+
+    // Call backend to issue JWT
+    const { data } = await axios.post("http://localhost:5000/api/auth/issue-token", {
+      uid: user.uid,
+      email: user.email,
+    });
+
+    // Save token for later API calls
+    localStorage.setItem("token", data.token);
+
+    setMsg("Login successful!");
+    navigate("/"); // redirect to home
+  } catch (err) {
+    console.error(err);
+    setMsg("Invalid email or password");
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen border-gray-100">

@@ -5,6 +5,8 @@ import { auth } from "../../Firebase/firebase.init";
 import axios from "axios"; // 👈 add axios
 import { toast, ToastContainer } from "react-toastify"; // 👈 add toast
 import "react-toastify/dist/ReactToastify.css";
+import { Navigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -83,6 +85,7 @@ export default function Register() {
       });
 
       toast.success("✅ Registration successful! You are now a donor.");
+      
       setMsg("Registration successful! You are now a donor.");
     } catch (err) {
       console.error("Registration error:", err);

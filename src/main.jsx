@@ -20,6 +20,10 @@ import AllDonationRequestsPage from './Components/DashBoard/AllDonationRequestsP
 import AdminHome from './Components/DashBoard/AdminHome.jsx';
 import { AdminOrVolunteerRoute } from './Layout/AdminOrVolunteerRoute.jsx';
 import AdminRoute from "../src/Layout/AdminRoute.jsx";
+import SearchPage from './Components/Home/SearchPage.jsx';
+import RequestsPage from './Components/DashBoard/RequestPage.jsx';
+import RequestDetailsPage from './Components/DashBoard/RequestDetailsPage.jsx';
+import FundingPage from './Components/DashBoard/FundingPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -28,12 +32,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
+      { path: "/search-donors", element: <SearchPage /> },
+      { path: "/requests", element: <RequestsPage /> },
 
       {
         element: <PublicRoute />,
         children: [
-          { path: "register", element: <Register /> },
-          { path: "login", element: <Login /> },
+          { path: "/register", element: <Register /> },
+          { path: "/login", element: <Login /> },
         ],
       },
 
@@ -65,6 +71,8 @@ const router = createBrowserRouter([
             
             ],
           },
+          { path: "/requests/:id", element: <RequestDetailsPage /> },
+          { path: "/funding" , element: <FundingPage /> },
         ],
       },
 
