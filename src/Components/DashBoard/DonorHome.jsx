@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../Contexts/AuthProvider";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function DonorHome() {
   const { user } = useAuth();
@@ -9,35 +10,52 @@ export default function DonorHome() {
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-  const loadData = async () => {
-    if (!user?.uid) return;
-    try {
-      // Load profile
-      const profileRes = await axios.get(`http://localhost:5000/api/users/${user.uid}`);
-      setProfile(profileRes.data);
+    const loadData = async () => {
+      if (!user?.uid) return;
+      try {
+        const profileRes = await axios.get(`http://localhost:5000/api/users/${user.uid}`);
+        setProfile(profileRes.data);
 
-      // Load recent requests
-      const requestsRes = await axios.get("http://localhost:5000/api/requests", {
-        params: { uid: user.uid, page: 1, limit: 3 },
-      });
-      setRecent(requestsRes.data.items || []);
-    } catch (err) {
-      console.error("Failed to load data:", err);
-    }
-  };
-  loadData();
-}, [user?.uid]);
+        const requestsRes = await axios.get("http://localhost:5000/api/requests", {
+          params: { uid: user.uid, page: 1, limit: 3 },
+        });
+        setRecent(requestsRes.data.items || []);
+      } catch (err) {
+        console.error("Failed to load data:", err);
+      }
+    };
+    loadData();
+  }, [user?.uid]);
 
   const updateStatus = async (id, next) => {
-    await axios.patch(`http://localhost:5000/api/requests/${id}`, { status: next });
-    setRecent((prev) => prev.map((r) => (r._id === id ? { ...r, status: next } : r)));
+    try {
+      await axios.patch(`http://localhost:5000/api/requests/${id}`, { status: next }, {
+        headers: { Authorization: `Bearer ${user?.token}` },
+      });
+      setRecent((prev) => prev.map((r) => (r._id === id ? { ...r, status: next } : r)));
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
   };
 
   const deleteRequest = async (id) => {
-    if (!confirm("Delete this request?")) return;
-    await axios.delete(`http://localhost:5000/api/requests/${id}`);
+  if (!window.confirm("Delete this request?")) return;
+
+  try {
+    const token = await user.getIdToken();
+
+    await axios.delete(`http://localhost:5000/api/requests/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
     setRecent((prev) => prev.filter((r) => r._id !== id));
-  };
+    toast.success("Request deleted");
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Delete failed");
+  }
+};
+
+
 
   return (
     <div className="space-y-6">
@@ -54,7 +72,7 @@ export default function DonorHome() {
         <div className="bg-white rounded shadow p-6">
           <h3 className="text-lg md:text-xl font-semibold mb-4">Your recent donation requests</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full text-sm md:text-base">
+            <table className="min-w-[700px] w-full text-sm md:text-base">
               <thead>
                 <tr className="text-left border-b">
                   <th className="p-2">Recipient</th>
@@ -79,7 +97,7 @@ export default function DonorHome() {
                     <td className="p-2">
                       {r.status === "inprogress" ? `${r.donorName} (${r.donorEmail})` : "—"}
                     </td>
-                    <td className="p-2 space-x-2 flex flex-wrap gap-2">
+                    <td className="p-2 flex flex-wrap gap-2">
                       {r.status === "inprogress" && (
                         <>
                           <button
@@ -105,7 +123,7 @@ export default function DonorHome() {
                       >
                         Delete
                       </button>
-                      <Link to={`/dashboard/requests/${r._id}`} className="px-3 py-1 bg-black text-white rounded">
+                      <Link to={`/requests/${r._id}`} className="px-3 py-1 bg-black text-white rounded">
                         View
                       </Link>
                     </td>
@@ -116,7 +134,7 @@ export default function DonorHome() {
           </div>
 
           <div className="mt-4">
-            <Link to="/dashboard/my-donation-requests" className="px-4 py-2 bg-gray-900 text-white rounded">
+            <Link to="/dashboard/my-donation-requests" className="px-4 py-2 bg-gray-900 text-white rounded block text-center">
               View my all requests
             </Link>
           </div>

@@ -24,6 +24,7 @@ import SearchPage from './Components/Home/SearchPage.jsx';
 import RequestsPage from './Components/DashBoard/RequestPage.jsx';
 import RequestDetailsPage from './Components/DashBoard/RequestDetailsPage.jsx';
 import FundingPage from './Components/DashBoard/FundingPage.jsx';
+import EditDonationRequest from './Components/DashBoard/EditDonationRequest.jsx';
 
 const router = createBrowserRouter([
   {
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
               { index: true, element: <DonorHome /> },
               { path: "profile", element: <ProfilePage /> },
               { path: "my-donation-requests", element: <MyDonationRequests /> },
-              { path: "create-donation-request", element: <CreateDonationRequest /> },
+              
 
               // Admin only
               { path: "all-users", element: <AllUsersPage /> },
@@ -68,8 +69,9 @@ const router = createBrowserRouter([
                     <AllDonationRequestsPage />
                   </AdminOrVolunteerRoute>
                 )
-              }  
-            
+              } ,
+              { path: "create-donation-request", element:<AdminOrVolunteerRoute><CreateDonationRequest /></AdminOrVolunteerRoute>  },
+             { path:"/dashboard/requests/:id/edit" , element:<AdminOrVolunteerRoute> <EditDonationRequest /> </AdminOrVolunteerRoute>}, 
             ],
           },
           { path: "/requests/:id", element: <RequestDetailsPage /> },
