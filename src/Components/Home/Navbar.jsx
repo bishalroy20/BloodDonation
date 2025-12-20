@@ -9,10 +9,12 @@ export default function Navbar() {
   const { user, profile, signOutUser } = useAuth();
 
   return (
-    <nav className="bg-red-600 text-white shadow-md">
+    <nav className="bg-red-600 text-white shadow-md w-full">
       <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold">🩸 Blood Donation</Link>
+        <Link to="/" className="text-lg sm:text-xl font-bold flex-shrink-0">
+          🩸 Blood Donation
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden sm:flex items-center space-x-6">
@@ -38,7 +40,9 @@ export default function Navbar() {
                     alt="avatar"
                     className="w-6 h-6 rounded-full"
                   />
-                  <span className="text-sm">{profile?.name || user?.email}</span>
+                  <span className="text-sm truncate max-w-[120px]">
+                    {profile?.name || user?.email}
+                  </span>
                 </button>
                 {menuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-md z-20">
@@ -73,21 +77,51 @@ export default function Navbar() {
 
       {/* Mobile dropdown */}
       {isOpen && (
-        <div className="sm:hidden px-4 pb-4 space-y-2">
-          <Link to="/requests" onClick={() => setIsOpen(false)}>Donation requests</Link>
+        <div className="sm:hidden px-4 pb-4 space-y-2 flex flex-col">
+          <Link
+            to="/requests"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 border-b border-red-200"
+          >
+            Donation requests
+          </Link>
 
           {!user ? (
             <>
-              <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
-              <Link to="/register" onClick={() => setIsOpen(false)}>Join as donor</Link>
+              <Link
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="block py-2 border-b border-red-200"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setIsOpen(false)}
+                className="block py-2 border-b border-red-200"
+              >
+                Join as donor
+              </Link>
             </>
           ) : (
             <>
-              <Link to="/funding" onClick={() => setIsOpen(false)}>Funding</Link>
-              <Link to="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link>
+              <Link
+                to="/funding"
+                onClick={() => setIsOpen(false)}
+                className="block py-2 border-b border-red-200"
+              >
+                Funding
+              </Link>
+              <Link
+                to="/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="block py-2 border-b border-red-200"
+              >
+                Dashboard
+              </Link>
               <button
                 onClick={() => { signOutUser(); setIsOpen(false); }}
-                className="block w-full text-left"
+                className="block w-full text-left py-2 border-b border-red-200"
               >
                 Logout
               </button>
