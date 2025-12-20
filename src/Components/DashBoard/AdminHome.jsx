@@ -33,11 +33,7 @@ export default function AdminHome() {
         <StatCard icon="💰" title="Total funding" value={`৳ ${stats.funding}`} color="bg-emerald-600" />
         <StatCard icon="🩸" title="Total requests" value={stats.requests} color="bg-indigo-600" />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard title="Total Donors" value={stats.donors} />
-        <StatCard title="Total Requests" value={stats.requests} />
-        <StatCard title="Total Funding" value={`৳${stats.funding}`} />
-      </div>
+      
     </div>
   );
 }
