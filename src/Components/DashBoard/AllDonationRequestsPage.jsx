@@ -66,8 +66,9 @@ export default function AllDonationRequestsPage() {
 
   return (
     <div className="bg-white rounded shadow p-6">
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <h2 className="text-lg md:text-xl font-semibold">
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold">
           All blood donation requests
         </h2>
         <select
@@ -76,7 +77,7 @@ export default function AllDonationRequestsPage() {
             setStatus(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded text-sm sm:text-base"
         >
           <option value="">All statuses</option>
           <option value="pending">Pending</option>
@@ -86,8 +87,61 @@ export default function AllDonationRequestsPage() {
         </select>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-[700px] w-full text-xs sm:text-sm md:text-base">
+      {/* Mobile cards */}
+      <div className="block sm:hidden space-y-4">
+        {data.map((r) => (
+          <div key={r._id} className="border rounded p-3 space-y-1 text-sm">
+            <p><span className="font-semibold">Recipient:</span> {r.recipientName}</p>
+            <p><span className="font-semibold">Location:</span> {r.recipientDistrict}, {r.recipientUpazila}</p>
+            <p><span className="font-semibold">Date:</span> {r.donationDate}</p>
+            <p><span className="font-semibold">Time:</span> {r.donationTime}</p>
+            <p><span className="font-semibold">Blood:</span> {r.bloodGroup}</p>
+            <p><span className="font-semibold">Status:</span> {r.status}</p>
+            <p><span className="font-semibold">Requester:</span> {r.requesterName} ({r.requesterEmail})</p>
+            <div className="flex flex-col gap-2 mt-2">
+              {profile?.role === "admin" && (
+                <>
+                  {r.status === "inprogress" && (
+                    <>
+                      <button
+                        className="px-3 py-1 bg-green-600 text-white rounded"
+                        onClick={() => updateStatus(r._id, "done")}
+                      >
+                        Done
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-gray-600 text-white rounded"
+                        onClick={() => updateStatus(r._id, "canceled")}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  )}
+                  <button
+                    className="px-3 py-1 bg-blue-600 text-white rounded"
+                    onClick={() => updateStatus(r._id, "inprogress")}
+                  >
+                    In progress
+                  </button>
+                  <button
+                    className="px-3 py-1 bg-red-600 text-white rounded"
+                    onClick={() => deleteRequest(r._id)}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+              {profile?.role === "volunteer" && (
+                <span className="text-gray-500">View only</span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden sm:block overflow-x-auto">
+        <table className="min-w-[700px] w-full text-sm md:text-base">
           <thead>
             <tr className="text-left border-b">
               <th className="p-2">Recipient</th>
@@ -104,59 +158,61 @@ export default function AllDonationRequestsPage() {
             {data.map((r) => (
               <tr key={r._id} className="border-b">
                 <td className="p-2">{r.recipientName}</td>
-                <td className="p-2">
-                  {r.recipientDistrict}, {r.recipientUpazila}
-                </td>
+                <td className="p-2">{r.recipientDistrict}, {r.recipientUpazila}</td>
                 <td className="p-2">{r.donationDate}</td>
                 <td className="p-2">{r.donationTime}</td>
                 <td className="p-2">{r.bloodGroup}</td>
                 <td className="p-2 capitalize">{r.status}</td>
+                <td className="p-2">{r.requesterName} ({r.requesterEmail})</td>
                 <td className="p-2">
-                  {r.requesterName} ({r.requesterEmail})
-                </td>
-                <td className="p-2 flex flex-wrap gap-2">
-                  {profile?.role === "admin" && (
-                    <>
-                      {r.status === "inprogress" && (
-                        <>
-                          <button
-                            className="px-3 py-1 bg-green-600 text-white rounded w-full sm:w-auto"
-                            onClick={() => updateStatus(r._id, "done")}
-                          >
-                            Done
-                          </button>
-                          <button
-                            className="px-3 py-1 bg-gray-600 text-white rounded w-full sm:w-auto"
-                            onClick={() => updateStatus(r._id, "canceled")}
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      )}
-                      <button
-                        className="px-3 py-1 bg-blue-600 text-white rounded w-full sm:w-auto"
-                        onClick={() => updateStatus(r._id, "inprogress")}
-                      >
-                        In progress
-                      </button>
-                      <button
-                        className="px-3 py-1 bg-red-600 text-white rounded w-full sm:w-auto"
-                        onClick={() => deleteRequest(r._id)}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-
-                  {profile?.role === "volunteer" && (
-                    <span className="text-gray-500">View only</span>
-                  )}
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-2">
+                    {profile?.role === "admin" && (
+                      <>
+                        {r.status === "inprogress" && (
+                          <>
+                            <button
+                              className="px-3 py-1 bg-green-600 text-white rounded w-full sm:w-auto"
+                              onClick={() => updateStatus(r._id, "done")}
+                            >
+                              Done
+                            </button>
+                            <button
+                              className="px-3 py-1 bg-gray-600 text-white rounded w-full sm:w-auto"
+                              onClick={() => updateStatus(r._id, "canceled")}
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        )}
+                        <button
+                          className="px-3 py-1 bg-blue-600 text-white rounded w-full sm:w-auto"
+                          onClick={() => updateStatus(r._id, "inprogress")}
+                        >
+                          In progress
+                        </button>
+                        <button
+                          className="px-3 py-1 bg-red-600 text-white rounded w-full sm:w-auto"
+                          onClick={() => deleteRequest(r._id)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                    {profile?.role === "volunteer" && (
+                      <span className="text-gray-500">View only</span>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      
+
+
+
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-2 mt-4">

@@ -1,3 +1,4 @@
+// src/pages/dashboard/AllUsersPage.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../Contexts/AuthProvider";
@@ -66,15 +67,16 @@ export default function AllUsersPage() {
 
   return (
     <div className="bg-white rounded shadow p-6">
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <h2 className="text-lg md:text-xl font-semibold">All Users</h2>
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold">All Users</h2>
         <select
           value={statusFilter}
           onChange={(e) => {
             setStatusFilter(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded text-sm sm:text-base"
         >
           <option value="">All statuses</option>
           <option value="active">Active</option>
@@ -82,7 +84,61 @@ export default function AllUsersPage() {
         </select>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Mobile cards */}
+      <div className="block sm:hidden space-y-4">
+        {users.map((u) => (
+          <div key={u._id} className="border rounded p-3 space-y-1 text-sm">
+            <div className="flex items-center gap-2">
+              <img
+                src={u.avatar || "/default-avatar.png"}
+                alt={u.name}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <p className="font-semibold">{u.name}</p>
+            </div>
+            <p><span className="font-semibold">Email:</span> {u.email}</p>
+            <p><span className="font-semibold">Role:</span> {u.role}</p>
+            <p><span className="font-semibold">Status:</span> {u.status}</p>
+            <div className="flex flex-col gap-2 mt-2">
+              {u.status === "active" && (
+                <button
+                  className="px-3 py-1 bg-gray-200 rounded"
+                  onClick={() => updateStatus(u._id, "blocked")}
+                >
+                  Block
+                </button>
+              )}
+              {u.status === "blocked" && (
+                <button
+                  className="px-3 py-1 bg-gray-200 rounded"
+                  onClick={() => updateStatus(u._id, "active")}
+                >
+                  Unblock
+                </button>
+              )}
+              {u.role !== "volunteer" && (
+                <button
+                  className="px-3 py-1 bg-gray-200 rounded"
+                  onClick={() => updateRole(u._id, "volunteer")}
+                >
+                  Make Volunteer
+                </button>
+              )}
+              {u.role !== "admin" && (
+                <button
+                  className="px-3 py-1 bg-gray-200 rounded"
+                  onClick={() => updateRole(u._id, "admin")}
+                >
+                  Make Admin
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="min-w-full text-sm md:text-base">
           <thead>
             <tr className="text-left border-b">
@@ -107,19 +163,18 @@ export default function AllUsersPage() {
         </table>
       </div>
 
-      <div className="flex items-center justify-center gap-2 mt-4">
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-4 text-sm sm:text-base">
         <button
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 w-full sm:w-auto"
           disabled={page === 1 || totalPages <= 1}
           onClick={() => setPage((p) => Math.max(1, p - 1))}
         >
           Prev
         </button>
-        <span className="px-3 py-1">
-          Page {page} / {totalPages}
-        </span>
+        <span className="px-3 py-1">Page {page} / {totalPages}</span>
         <button
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 w-full sm:w-auto"
           disabled={page >= totalPages}
           onClick={() => setPage((p) => p + 1)}
         >
@@ -129,6 +184,7 @@ export default function AllUsersPage() {
     </div>
   );
 }
+
 
 // ✅ Inline UserRow component with toggle state
 function UserRow({ u, updateStatus, updateRole }) {
