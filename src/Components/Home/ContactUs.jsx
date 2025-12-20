@@ -16,7 +16,7 @@ export default function ContactUs() {
       <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-2xl font-semibold mb-4">Contact us</h2>
-          <p className="text-gray-700 mb-2">Phone: +880-1XXX-XXXXXX</p>
+          <p className="text-gray-700 mb-2">Phone: +880-1309482122</p>
           <p className="text-gray-700">Email: support@blooddonation.org</p>
         </div>
         <form onSubmit={onSubmit} className="bg-white p-6 rounded border">
