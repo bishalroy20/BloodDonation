@@ -11,7 +11,7 @@ import { AuthContext } from "./AuthContext";
 import axios from "axios";
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);       // Firebase user
+  const [user, setUser] = useState(null); // Firebase user
   const [profile, setProfile] = useState(null); // Backend profile (role, status, etc.)
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +37,9 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           // ✅ Fetch profile from backend using Firebase UID
-          const res = await axios.get(`http://localhost:5000/api/users/${currentUser.uid}`);
+          const res = await axios.get(
+            `https://blood-donation-server-gilt-theta.vercel.app/api/users/${currentUser.uid}`
+          );
           setProfile(res.data); // should include { name, email, role, status }
         } catch (err) {
           console.error("Failed to load profile:", err);
@@ -58,14 +60,12 @@ const AuthProvider = ({ children }) => {
     signInUser,
     signOutUser,
     user,
-    profile,   // ✅ expose profile
+    profile, // ✅ expose profile
     loading,
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 

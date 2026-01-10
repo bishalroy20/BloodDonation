@@ -31,9 +31,12 @@ export default function SearchPage() {
     setSearched(true);
 
     try {
-      const res = await axios.get("http://localhost:5000/api/search-donors", {
-        params: { bloodGroup, district, upazila },
-      });
+      const res = await axios.get(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/search-donors",
+        {
+          params: { bloodGroup, district, upazila },
+        }
+      );
       setDonors(res.data || []);
     } catch (err) {
       console.error(err);
@@ -58,10 +61,14 @@ export default function SearchPage() {
           className="px-3 py-2 border rounded"
         >
           <option value="">Blood group</option>
-          <option>A+</option><option>A-</option>
-          <option>B+</option><option>B-</option>
-          <option>AB+</option><option>AB-</option>
-          <option>O+</option><option>O-</option>
+          <option>A+</option>
+          <option>A-</option>
+          <option>B+</option>
+          <option>B-</option>
+          <option>AB+</option>
+          <option>AB-</option>
+          <option>O+</option>
+          <option>O-</option>
         </select>
 
         {/* District */}
@@ -73,7 +80,9 @@ export default function SearchPage() {
         >
           <option value="">District</option>
           {districts.map((d) => (
-            <option key={d.name} value={d.name}>{d.name}</option>
+            <option key={d.name} value={d.name}>
+              {d.name}
+            </option>
           ))}
         </select>
 
@@ -86,7 +95,9 @@ export default function SearchPage() {
         >
           <option value="">Upazila</option>
           {upazilas.map((u) => (
-            <option key={u} value={u}>{u}</option>
+            <option key={u} value={u}>
+              {u}
+            </option>
           ))}
         </select>
 
@@ -100,7 +111,9 @@ export default function SearchPage() {
 
       {/* Results */}
       {!searched && (
-        <p className="text-gray-600">Fill the form and click search to see donors.</p>
+        <p className="text-gray-600">
+          Fill the form and click search to see donors.
+        </p>
       )}
 
       {searched && donors.length === 0 && (

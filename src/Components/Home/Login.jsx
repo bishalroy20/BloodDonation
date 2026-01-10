@@ -16,41 +16,53 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    // Firebase login
-    const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
-    const user = userCredential.user;
+    e.preventDefault();
+    try {
+      // Firebase login
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+      const user = userCredential.user;
 
-    // Call backend to issue JWT
-    const { data } = await axios.post("http://localhost:5000/api/auth/issue-token", {
-      uid: user.uid,
-      email: user.email,
-    });
+      // Call backend to issue JWT
+      const { data } = await axios.post(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/auth/issue-token",
+        {
+          uid: user.uid,
+          email: user.email,
+        }
+      );
 
-    // Save token for later API calls
-    localStorage.setItem("token", data.token);
+      // Save token for later API calls
+      localStorage.setItem("token", data.token);
 
-    setMsg("Login successful!");
-    navigate("/"); // redirect to home
-  } catch (err) {
-    console.error(err);
-    setMsg("Invalid email or password");
-  }
-};
-
+      setMsg("Login successful!");
+      navigate("/"); // redirect to home
+    } catch (err) {
+      console.error(err);
+      setMsg("Invalid email or password");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen border-gray-100">
       <div className=" shadow-lg rounded-lg p-8 w-full max-w-md bg-red-300">
-        <h2 className="text-2xl font-bold text-center text-red-600 mb-6">🔑 Login</h2>
+        <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
+          🔑 Login
+        </h2>
         {msg && (
-          <p className="text-center mb-4 text-sm font-medium text-red-500">{msg}</p>
+          <p className="text-center mb-4 text-sm font-medium text-red-500">
+            {msg}
+          </p>
         )}
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Email
+            </label>
             <input
               name="email"
               type="email"
@@ -63,7 +75,9 @@ export default function Login() {
 
           {/* Password with eye toggle */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Password
+            </label>
             <div className="relative">
               <input
                 name="password"

@@ -17,7 +17,9 @@ export default function RequestDetailsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/requests/${id}`);
+        const res = await axios.get(
+          `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`
+        );
         setRequest(res.data);
       } catch (err) {
         console.error(err);
@@ -28,14 +30,19 @@ export default function RequestDetailsPage() {
 
   const confirmDonation = async () => {
     try {
-      await axios.patch(`http://localhost:5000/api/requests/${id}/confirm`, {
-        donorName: profile?.name || user.displayName,
-        donorEmail: profile?.email || user.email,
-      });
+      await axios.patch(
+        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}/confirm`,
+        {
+          donorName: profile?.name || user.displayName,
+          donorEmail: profile?.email || user.email,
+        }
+      );
       alert("Donation confirmed! Status changed to inprogress.");
       setShowModal(false);
       // reload request
-      const res = await axios.get(`http://localhost:5000/api/requests/${id}`);
+      const res = await axios.get(
+        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`
+      );
       setRequest(res.data);
     } catch (err) {
       alert(err?.response?.data?.message || "Failed to confirm donation");
@@ -48,14 +55,31 @@ export default function RequestDetailsPage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h2 className="text-2xl font-semibold mb-6">Donation Request Details</h2>
       <div className="p-6 border rounded bg-white space-y-4">
-        <p><strong>Recipient:</strong> {request.recipientName}</p>
-        <p><strong>Location:</strong> {request.recipientDistrict}, {request.recipientUpazila}</p>
-        <p><strong>Hospital:</strong> {request.hospitalName}</p>
-        <p><strong>Address:</strong> {request.addressLine}</p>
-        <p><strong>Blood Group:</strong> {request.bloodGroup}</p>
-        <p><strong>Date:</strong> {request.donationDate}</p>
-        <p><strong>Time:</strong> {request.donationTime}</p>
-        <p><strong>Message:</strong> {request.requestMessage}</p>
+        <p>
+          <strong>Recipient:</strong> {request.recipientName}
+        </p>
+        <p>
+          <strong>Location:</strong> {request.recipientDistrict},{" "}
+          {request.recipientUpazila}
+        </p>
+        <p>
+          <strong>Hospital:</strong> {request.hospitalName}
+        </p>
+        <p>
+          <strong>Address:</strong> {request.addressLine}
+        </p>
+        <p>
+          <strong>Blood Group:</strong> {request.bloodGroup}
+        </p>
+        <p>
+          <strong>Date:</strong> {request.donationDate}
+        </p>
+        <p>
+          <strong>Time:</strong> {request.donationTime}
+        </p>
+        <p>
+          <strong>Message:</strong> {request.requestMessage}
+        </p>
       </div>
 
       {request.status === "pending" && (

@@ -25,6 +25,9 @@ import RequestsPage from './Components/DashBoard/RequestPage.jsx';
 import RequestDetailsPage from './Components/DashBoard/RequestDetailsPage.jsx';
 import FundingPage from './Components/DashBoard/FundingPage.jsx';
 import EditDonationRequest from './Components/DashBoard/EditDonationRequest.jsx';
+import CreateBlog from './Components/Blog/CreateBlog.jsx';
+import BlogList from './Components/Blog/BlogList.jsx';
+import BlogDetails from './Components/Blog/BlogDetails.jsx';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +38,8 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "/search-donors", element: <SearchPage /> },
       { path: "/requests", element: <RequestsPage /> },
+      { path: "/blogs", element: <BlogList /> },
+      { path: "/blogs/:id", element: <BlogDetails /> },
 
       {
         element: <PublicRoute />,
@@ -59,6 +64,7 @@ const router = createBrowserRouter([
               // Admin only
               { path: "all-users", element: <AllUsersPage /> },
               { path: "admin", element: <AdminRoute><AdminHome /></AdminRoute> },
+              { path: "admin/create-blog", element: <AdminRoute><CreateBlog /></AdminRoute> },
               
 
               // Volunteer + Admin can see requests
@@ -70,8 +76,8 @@ const router = createBrowserRouter([
                   </AdminOrVolunteerRoute>
                 )
               } ,
-              { path: "create-donation-request", element:<AdminOrVolunteerRoute><CreateDonationRequest /></AdminOrVolunteerRoute>  },
-             { path:"/dashboard/requests/:id/edit" , element:<AdminOrVolunteerRoute> <EditDonationRequest /> </AdminOrVolunteerRoute>}, 
+              { path: "create-donation-request", element:<CreateDonationRequest /> },
+             { path:"/dashboard/requests/:id/edit" , element: <EditDonationRequest /> }, 
             ],
           },
           { path: "/requests/:id", element: <RequestDetailsPage /> },

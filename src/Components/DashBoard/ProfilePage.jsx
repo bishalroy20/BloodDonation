@@ -24,7 +24,9 @@ export default function ProfilePage() {
     const loadProfile = async () => {
       if (!user?.uid) return;
       try {
-        const res = await axios.get(`http://localhost:5000/api/users/${user.uid}`);
+        const res = await axios.get(
+          `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`
+        );
         setProfile(res.data); // now includes role and status
         setForm({
           name: res.data.name || user?.displayName || "",
@@ -45,17 +47,22 @@ export default function ProfilePage() {
 
   const onSave = async () => {
     try {
-      await axios.patch(`http://localhost:5000/api/users/${user.uid}`, {
-        name: form.name,
-        avatarUrl: form.avatarUrl,
-        bloodGroup: form.bloodGroup,
-        district: form.district,
-        upazila: form.upazila,
-      });
+      await axios.patch(
+        `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`,
+        {
+          name: form.name,
+          avatarUrl: form.avatarUrl,
+          bloodGroup: form.bloodGroup,
+          district: form.district,
+          upazila: form.upazila,
+        }
+      );
       toast.success("Profile updated");
       setEditing(false);
       // reload profile after save
-      const res = await axios.get(`http://localhost:5000/api/users/${user.uid}`);
+      const res = await axios.get(
+        `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`
+      );
       setProfile(res.data);
     } catch (err) {
       toast.error("Failed to update profile");
@@ -97,7 +104,9 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">Email (read-only)</label>
+          <label className="block text-sm text-gray-600">
+            Email (read-only)
+          </label>
           <input
             name="email"
             value={form.email}
@@ -127,10 +136,14 @@ export default function ProfilePage() {
             className="w-full px-3 py-2 border rounded"
           >
             <option value="">Select</option>
-            <option>A+</option><option>A-</option>
-            <option>B+</option><option>B-</option>
-            <option>AB+</option><option>AB-</option>
-            <option>O+</option><option>O-</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+            <option>O+</option>
+            <option>O-</option>
           </select>
         </div>
 
@@ -158,8 +171,12 @@ export default function ProfilePage() {
       </form>
 
       <div className="mt-6 text-sm text-gray-600">
-        <p><span className="font-semibold">Role:</span> {profile?.role}</p>
-        <p><span className="font-semibold">Status:</span> {profile?.status}</p>
+        <p>
+          <span className="font-semibold">Role:</span> {profile?.role}
+        </p>
+        <p>
+          <span className="font-semibold">Status:</span> {profile?.status}
+        </p>
       </div>
     </div>
   );

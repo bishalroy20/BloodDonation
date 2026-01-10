@@ -19,6 +19,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <div className="hidden sm:flex items-center space-x-6">
           <Link to="/requests" className="hover:text-gray-200">Donation requests</Link>
+          <Link to="/blogs" className="hover:text-gray-200">Blogs</Link>
 
           {!user ? (
             <>
@@ -84,6 +85,13 @@ export default function Navbar() {
             className="block py-2 border-b border-red-200"
           >
             Donation requests
+          </Link>
+          <Link
+            to="/blogs"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 border-b border-red-200"
+          >
+            Blogs
           </Link>
 
           {!user ? (

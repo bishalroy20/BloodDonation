@@ -15,10 +15,13 @@ export default function AllDonationRequestsPage() {
   const load = async () => {
     try {
       const token = user?.token || (await user.getIdToken?.());
-      const res = await axios.get("http://localhost:5000/api/admin/requests", {
-        params: { status, page, limit },
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/admin/requests",
+        {
+          params: { status, page, limit },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setData(res.data.items);
       setTotal(res.data.total);
     } catch (err) {
@@ -37,7 +40,7 @@ export default function AllDonationRequestsPage() {
     try {
       const token = user?.token || (await user.getIdToken?.());
       await axios.patch(
-        `http://localhost:5000/api/admin/requests/${id}/status`,
+        `https://blood-donation-server-gilt-theta.vercel.app/api/admin/requests/${id}/status`,
         { status: next },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -53,9 +56,12 @@ export default function AllDonationRequestsPage() {
     if (!window.confirm("Delete this request?")) return;
     try {
       const token = user?.token || (await user.getIdToken?.());
-      await axios.delete(`http://localhost:5000/api/admin/requests/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `https://blood-donation-server-gilt-theta.vercel.app/api/admin/requests/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       toast.success("Request deleted");
       load();
     } catch (err) {
@@ -91,13 +97,30 @@ export default function AllDonationRequestsPage() {
       <div className="block sm:hidden space-y-4">
         {data.map((r) => (
           <div key={r._id} className="border rounded p-3 space-y-1 text-sm">
-            <p><span className="font-semibold">Recipient:</span> {r.recipientName}</p>
-            <p><span className="font-semibold">Location:</span> {r.recipientDistrict}, {r.recipientUpazila}</p>
-            <p><span className="font-semibold">Date:</span> {r.donationDate}</p>
-            <p><span className="font-semibold">Time:</span> {r.donationTime}</p>
-            <p><span className="font-semibold">Blood:</span> {r.bloodGroup}</p>
-            <p><span className="font-semibold">Status:</span> {r.status}</p>
-            <p><span className="font-semibold">Requester:</span> {r.requesterName} ({r.requesterEmail})</p>
+            <p>
+              <span className="font-semibold">Recipient:</span>{" "}
+              {r.recipientName}
+            </p>
+            <p>
+              <span className="font-semibold">Location:</span>{" "}
+              {r.recipientDistrict}, {r.recipientUpazila}
+            </p>
+            <p>
+              <span className="font-semibold">Date:</span> {r.donationDate}
+            </p>
+            <p>
+              <span className="font-semibold">Time:</span> {r.donationTime}
+            </p>
+            <p>
+              <span className="font-semibold">Blood:</span> {r.bloodGroup}
+            </p>
+            <p>
+              <span className="font-semibold">Status:</span> {r.status}
+            </p>
+            <p>
+              <span className="font-semibold">Requester:</span>{" "}
+              {r.requesterName} ({r.requesterEmail})
+            </p>
             <div className="flex flex-col gap-2 mt-2">
               {profile?.role === "admin" && (
                 <>
@@ -158,12 +181,16 @@ export default function AllDonationRequestsPage() {
             {data.map((r) => (
               <tr key={r._id} className="border-b">
                 <td className="p-2">{r.recipientName}</td>
-                <td className="p-2">{r.recipientDistrict}, {r.recipientUpazila}</td>
+                <td className="p-2">
+                  {r.recipientDistrict}, {r.recipientUpazila}
+                </td>
                 <td className="p-2">{r.donationDate}</td>
                 <td className="p-2">{r.donationTime}</td>
                 <td className="p-2">{r.bloodGroup}</td>
                 <td className="p-2 capitalize">{r.status}</td>
-                <td className="p-2">{r.requesterName} ({r.requesterEmail})</td>
+                <td className="p-2">
+                  {r.requesterName} ({r.requesterEmail})
+                </td>
                 <td className="p-2">
                   <div className="flex flex-col sm:flex-row flex-wrap gap-2">
                     {profile?.role === "admin" && (
@@ -208,11 +235,6 @@ export default function AllDonationRequestsPage() {
           </tbody>
         </table>
       </div>
-
-      
-
-
-
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-2 mt-4">

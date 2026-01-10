@@ -74,18 +74,21 @@ export default function Register() {
       await updateProfile(cred.user, { displayName: form.name });
 
       // 👇 Send user info to backend MongoDB
-      await axios.post("http://localhost:5000/api/auth/register", {
-        uid: cred.user.uid,
-        email: cred.user.email,
-        name: form.name,
-        avatarUrl,
-        bloodGroup: form.bloodGroup,
-        district: form.district,
-        upazila: form.upazila,
-      });
+      await axios.post(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/auth/register",
+        {
+          uid: cred.user.uid,
+          email: cred.user.email,
+          name: form.name,
+          avatarUrl,
+          bloodGroup: form.bloodGroup,
+          district: form.district,
+          upazila: form.upazila,
+        }
+      );
 
       toast.success("✅ Registration successful! You are now a donor.");
-      
+
       setMsg("Registration successful! You are now a donor.");
     } catch (err) {
       console.error("Registration error:", err);
@@ -98,32 +101,81 @@ export default function Register() {
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="bg-red-300 shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-red-600 mb-6">📝 Register</h2>
-        {msg && <p className="text-center mb-4 text-sm font-medium text-red-500">{msg}</p>}
+        <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
+          📝 Register
+        </h2>
+        {msg && (
+          <p className="text-center mb-4 text-sm font-medium text-red-500">
+            {msg}
+          </p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input name="email" type="email" placeholder="Email" onChange={handleChange} required className="w-full px-4 py-2 border rounded" />
-          <input name="name" type="text" placeholder="Name" onChange={handleChange} required className="w-full px-4 py-2 border rounded" />
-          <input name="avatarFile" type="file" accept="image/*" onChange={handleChange} className="w-full text-sm" />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded"
+          />
+          <input
+            name="name"
+            type="text"
+            placeholder="Name"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded"
+          />
+          <input
+            name="avatarFile"
+            type="file"
+            accept="image/*"
+            onChange={handleChange}
+            className="w-full text-sm"
+          />
 
-          <select name="bloodGroup" onChange={handleChange} required className="w-full px-4 py-2 border rounded">
+          <select
+            name="bloodGroup"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded"
+          >
             <option value="">Select Blood Group</option>
-            <option>A+</option><option>A-</option>
-            <option>B+</option><option>B-</option>
-            <option>AB+</option><option>AB-</option>
-            <option>O+</option><option>O-</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+            <option>O+</option>
+            <option>O-</option>
           </select>
 
-          <select name="district" onChange={handleChange} required className="w-full px-4 py-2 border rounded">
+          <select
+            name="district"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded"
+          >
             <option value="">Select District</option>
             {districts.map((d) => (
-              <option key={d.name} value={d.name}>{d.name}</option>
+              <option key={d.name} value={d.name}>
+                {d.name}
+              </option>
             ))}
           </select>
 
-          <select name="upazila" onChange={handleChange} required className="w-full px-4 py-2 border rounded">
+          <select
+            name="upazila"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border rounded"
+          >
             <option value="">Select Upazila</option>
             {upazilas.map((u) => (
-              <option key={u} value={u}>{u}</option>
+              <option key={u} value={u}>
+                {u}
+              </option>
             ))}
           </select>
 
@@ -165,7 +217,10 @@ export default function Register() {
             </button>
           </div>
 
-          <button type="submit" className="w-full bg-red-600 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-red-700 transition">
+          <button
+            type="submit"
+            className="w-full bg-red-600 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-red-700 transition"
+          >
             Register
           </button>
         </form>

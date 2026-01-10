@@ -1,6 +1,8 @@
 // src/pages/Home.jsx
 
+import RecentBlogsSlider from "../Blog/RecentBlogsSlider";
 import Banner from "./Banner";
+import BloodDonationInfoSection from "./BloodDonationInfoSection";
 import ContactUs from "./ContactUs";
 import Featured from "./Featured";
 import Footer from "./Footer";
@@ -14,7 +16,9 @@ export default function Home() {
       
       <main className="flex-1">
         <Banner />
+        <RecentBlogsSlider />
         <Featured />
+        <BloodDonationInfoSection />
         <RecentRequests />
         <ContactUs />
         <StatsSection />

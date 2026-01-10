@@ -3,14 +3,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../Contexts/AuthProvider";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {
+  Elements,
+  CardElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function FundingForm({ onSuccess }) {
   const stripe = useStripe();
   const elements = useElements();
-  const [amountDisplay, setAmountDisplay] = useState(""); 
+  const [amountDisplay, setAmountDisplay] = useState("");
   const [loading, setLoading] = useState(false);
 
   const pay = async (e) => {
@@ -22,13 +27,17 @@ function FundingForm({ onSuccess }) {
       alert("Enter a valid amount");
       return;
     }
-    const amount = Math.round(amountFloat * 100); 
+    const amount = Math.round(amountFloat * 100);
 
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:5000/api/funding/create-intent", { amount }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const { data } = await axios.post(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/funding/create-intent",
+        { amount },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
 
       const clientSecret = data.clientSecret;
       const card = elements.getElement(CardElement);
@@ -38,10 +47,19 @@ function FundingForm({ onSuccess }) {
 
       if (result.error) {
         alert(result.error.message);
-      } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
-        await axios.post("http://localhost:5000/api/funding/record", { amount }, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+      } else if (
+        result.paymentIntent &&
+        result.paymentIntent.status === "succeeded"
+      ) {
+        await axios.post(
+          "https://blood-donation-server-gilt-theta.vercel.app/api/funding/record",
+          { amount },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         alert("Thank you for your support!");
         onSuccess();
       }
@@ -85,17 +103,26 @@ export default function FundingPage() {
 
   // Require auth client-side (you should also protect route server-side via JWT)
   if (!user) {
-    return <div className="max-w-7xl mx-auto p-6">Please log in to view funding.</div>;
+    return (
+      <div className="max-w-7xl mx-auto p-6">
+        Please log in to view funding.
+      </div>
+    );
   }
 
   const load = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/funding", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const { data } = await axios.get(
+      "https://blood-donation-server-gilt-theta.vercel.app/api/funding",
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     setItems(data || []);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -125,11 +152,11 @@ export default function FundingPage() {
               <tr key={f._id} className="border-b">
                 <td className="p-2">{f.name || "—"}</td>
                 <td className="p-2">{f.email}</td>
-                <td className="p-2">
-                  ${(f.amount / 100).toFixed(2)}
-                </td>
+                <td className="p-2">${(f.amount / 100).toFixed(2)}</td>
                 <td className="p-2">{f.currency.toUpperCase()}</td>
-                <td className="p-2">{new Date(f.createdAt).toLocaleString()}</td>
+                <td className="p-2">
+                  {new Date(f.createdAt).toLocaleString()}
+                </td>
               </tr>
             ))}
           </tbody>

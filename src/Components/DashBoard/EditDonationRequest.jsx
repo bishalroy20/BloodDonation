@@ -38,10 +38,14 @@ export default function EditDonationRequest() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/requests/${id}`)
+        .get(
+          `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`
+        )
         .then((res) => {
           setForm(res.data);
-          const selected = districts.find((d) => d.name === res.data.recipientDistrict);
+          const selected = districts.find(
+            (d) => d.name === res.data.recipientDistrict
+          );
           setUpazilas(selected ? selected.upazilas : []);
         })
         .catch(() => toast.error("Failed to load request"))
@@ -71,9 +75,13 @@ export default function EditDonationRequest() {
     }
 
     try {
-      await axios.patch(`http://localhost:5000/api/requests/${id}`, form, {
-        headers: { Authorization: `Bearer ${user?.token}` },
-      });
+      await axios.patch(
+        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`,
+        form,
+        {
+          headers: { Authorization: `Bearer ${user?.token}` },
+        }
+      );
       toast.success("Donation request updated successfully");
       navigate("/dashboard/my-donation-requests");
     } catch (err) {
@@ -88,7 +96,10 @@ export default function EditDonationRequest() {
       <ToastContainer position="top-right" autoClose={2500} />
       <h2 className="text-xl font-semibold mb-6">Edit Donation Request</h2>
 
-      <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form
+        onSubmit={onSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
         {/* Recipient Name */}
         <div className="md:col-span-2">
           <label className="block text-sm text-gray-600">Recipient Name</label>
@@ -103,7 +114,9 @@ export default function EditDonationRequest() {
 
         {/* District */}
         <div>
-          <label className="block text-sm text-gray-600">Recipient District</label>
+          <label className="block text-sm text-gray-600">
+            Recipient District
+          </label>
           <select
             name="recipientDistrict"
             value={form.recipientDistrict}
@@ -122,7 +135,9 @@ export default function EditDonationRequest() {
 
         {/* Upazila */}
         <div>
-          <label className="block text-sm text-gray-600">Recipient Upazila</label>
+          <label className="block text-sm text-gray-600">
+            Recipient Upazila
+          </label>
           <select
             name="recipientUpazila"
             value={form.recipientUpazila}
@@ -174,10 +189,14 @@ export default function EditDonationRequest() {
             className="w-full px-3 py-2 border rounded"
           >
             <option value="">Select</option>
-            <option>A+</option><option>A-</option>
-            <option>B+</option><option>B-</option>
-            <option>AB+</option><option>AB-</option>
-            <option>O+</option><option>O-</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+            <option>O+</option>
+            <option>O-</option>
           </select>
         </div>
 

@@ -14,9 +14,12 @@ export default function MyDonationRequests() {
   useEffect(() => {
     const load = async () => {
       if (!user?.uid) return;
-      const res = await axios.get("http://localhost:5000/api/requests", {
-        params: { uid: user.uid, status, page, limit }, // ✅ use user.uid
-      });
+      const res = await axios.get(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/requests",
+        {
+          params: { uid: user.uid, status, page, limit }, // ✅ use user.uid
+        }
+      );
       setData(res.data.items || []);
       setTotal(res.data.total || 0);
     };
@@ -24,13 +27,6 @@ export default function MyDonationRequests() {
   }, [user?.uid, status, page, limit]);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));
-
-
-
-
-
-
-
 
   return (
     <div className="bg-white rounded shadow p-6">
@@ -41,7 +37,10 @@ export default function MyDonationRequests() {
         </h2>
         <select
           value={status}
-          onChange={(e) => { setStatus(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setPage(1);
+          }}
           className="px-3 py-2 border rounded text-sm sm:text-base"
         >
           <option value="">All statuses</option>
@@ -56,12 +55,26 @@ export default function MyDonationRequests() {
       <div className="block sm:hidden space-y-4">
         {data.map((r) => (
           <div key={r._id} className="border rounded p-3 space-y-1 text-sm">
-            <p><span className="font-semibold">Recipient:</span> {r.recipientName}</p>
-            <p><span className="font-semibold">Location:</span> {r.recipientDistrict}, {r.recipientUpazila}</p>
-            <p><span className="font-semibold">Date:</span> {r.donationDate}</p>
-            <p><span className="font-semibold">Time:</span> {r.donationTime}</p>
-            <p><span className="font-semibold">Blood:</span> {r.bloodGroup}</p>
-            <p><span className="font-semibold">Status:</span> {r.status}</p>
+            <p>
+              <span className="font-semibold">Recipient:</span>{" "}
+              {r.recipientName}
+            </p>
+            <p>
+              <span className="font-semibold">Location:</span>{" "}
+              {r.recipientDistrict}, {r.recipientUpazila}
+            </p>
+            <p>
+              <span className="font-semibold">Date:</span> {r.donationDate}
+            </p>
+            <p>
+              <span className="font-semibold">Time:</span> {r.donationTime}
+            </p>
+            <p>
+              <span className="font-semibold">Blood:</span> {r.bloodGroup}
+            </p>
+            <p>
+              <span className="font-semibold">Status:</span> {r.status}
+            </p>
           </div>
         ))}
       </div>
@@ -83,7 +96,9 @@ export default function MyDonationRequests() {
             {data.map((r) => (
               <tr key={r._id} className="border-b">
                 <td className="p-2">{r.recipientName}</td>
-                <td className="p-2">{r.recipientDistrict}, {r.recipientUpazila}</td>
+                <td className="p-2">
+                  {r.recipientDistrict}, {r.recipientUpazila}
+                </td>
                 <td className="p-2">{r.donationDate}</td>
                 <td className="p-2">{r.donationTime}</td>
                 <td className="p-2">{r.bloodGroup}</td>
@@ -91,8 +106,6 @@ export default function MyDonationRequests() {
               </tr>
             ))}
           </tbody>
-
-          
         </table>
       </div>
 
@@ -105,7 +118,9 @@ export default function MyDonationRequests() {
         >
           Prev
         </button>
-        <span className="px-3 py-1">Page {page} / {totalPages}</span>
+        <span className="px-3 py-1">
+          Page {page} / {totalPages}
+        </span>
         <button
           className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 w-full sm:w-auto"
           disabled={page >= totalPages}

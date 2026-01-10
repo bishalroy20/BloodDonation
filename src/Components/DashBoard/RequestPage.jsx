@@ -9,7 +9,9 @@ export default function RequestsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/public/requests");
+        const res = await axios.get(
+          "https://blood-donation-server-gilt-theta.vercel.app/api/public/requests"
+        );
         setRequests(res.data || []);
       } catch (err) {
         console.error(err);
@@ -42,7 +44,9 @@ export default function RequestsPage() {
             {requests.map((r) => (
               <tr key={r._id} className="border-b">
                 <td className="p-2">{r.recipientName}</td>
-                <td className="p-2">{r.recipientDistrict}, {r.recipientUpazila}</td>
+                <td className="p-2">
+                  {r.recipientDistrict}, {r.recipientUpazila}
+                </td>
                 <td className="p-2">{r.bloodGroup}</td>
                 <td className="p-2">{r.donationDate}</td>
                 <td className="p-2">{r.donationTime}</td>

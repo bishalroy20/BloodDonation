@@ -13,7 +13,9 @@ export default function AllUsersPage() {
 
   const loadUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users");
+      const res = await axios.get(
+        "https://blood-donation-server-gilt-theta.vercel.app/api/users"
+      );
       let allUsers = res.data || [];
 
       if (statusFilter) {
@@ -39,12 +41,18 @@ export default function AllUsersPage() {
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const updateStatus = async (id, nextStatus) => {
-    await axios.patch(`http://localhost:5000/api/users/${id}/status`, { status: nextStatus });
+    await axios.patch(
+      `https://blood-donation-server-gilt-theta.vercel.app/api/users/${id}/status`,
+      { status: nextStatus }
+    );
     loadUsers();
   };
 
   const updateRole = async (id, nextRole) => {
-    await axios.patch(`http://localhost:5000/api/users/${id}/role`, { role: nextRole });
+    await axios.patch(
+      `https://blood-donation-server-gilt-theta.vercel.app/api/users/${id}/role`,
+      { role: nextRole }
+    );
     loadUsers();
   };
 
@@ -69,7 +77,9 @@ export default function AllUsersPage() {
     <div className="bg-white rounded shadow p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <h2 className="text-base sm:text-lg md:text-xl font-semibold">All Users</h2>
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold">
+          All Users
+        </h2>
         <select
           value={statusFilter}
           onChange={(e) => {
@@ -96,9 +106,15 @@ export default function AllUsersPage() {
               />
               <p className="font-semibold">{u.name}</p>
             </div>
-            <p><span className="font-semibold">Email:</span> {u.email}</p>
-            <p><span className="font-semibold">Role:</span> {u.role}</p>
-            <p><span className="font-semibold">Status:</span> {u.status}</p>
+            <p>
+              <span className="font-semibold">Email:</span> {u.email}
+            </p>
+            <p>
+              <span className="font-semibold">Role:</span> {u.role}
+            </p>
+            <p>
+              <span className="font-semibold">Status:</span> {u.status}
+            </p>
             <div className="flex flex-col gap-2 mt-2">
               {u.status === "active" && (
                 <button
@@ -172,7 +188,9 @@ export default function AllUsersPage() {
         >
           Prev
         </button>
-        <span className="px-3 py-1">Page {page} / {totalPages}</span>
+        <span className="px-3 py-1">
+          Page {page} / {totalPages}
+        </span>
         <button
           className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 w-full sm:w-auto"
           disabled={page >= totalPages}
@@ -184,7 +202,6 @@ export default function AllUsersPage() {
     </div>
   );
 }
-
 
 // ✅ Inline UserRow component with toggle state
 function UserRow({ u, updateStatus, updateRole }) {
