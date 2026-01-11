@@ -10,7 +10,7 @@ export default function RecentRequests() {
     const load = async () => {
       try {
         const res = await axios.get(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/public/requests"
+          "http://localhost:5000/api/public/requests"
         );
 
         let data = [];
@@ -28,8 +28,7 @@ export default function RecentRequests() {
         const recentFive = data
           .sort(
             (a, b) =>
-              new Date(b.createdAt || b._id) -
-              new Date(a.createdAt || a._id)
+              new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id)
           )
           .slice(0, 5);
 
@@ -57,9 +56,7 @@ export default function RecentRequests() {
         )}
 
         {!loading && requests.length === 0 && (
-          <p className="text-center text-white">
-            No recent requests found
-          </p>
+          <p className="text-center text-white">No recent requests found</p>
         )}
 
         {!loading && requests.length > 0 && (
@@ -69,13 +66,10 @@ export default function RecentRequests() {
                 key={r._id}
                 className="bg-gradient-to-br from-red-500 via-red-400 to-white rounded-xl shadow-lg p-5 text-white hover:shadow-2xl transition"
               >
-                <h3 className="text-lg font-bold mb-2">
-                  {r.recipientName}
-                </h3>
+                <h3 className="text-lg font-bold mb-2">{r.recipientName}</h3>
 
                 <p className="text-sm mb-1">
-                  <span className="font-semibold">Blood:</span>{" "}
-                  {r.bloodGroup}
+                  <span className="font-semibold">Blood:</span> {r.bloodGroup}
                 </p>
 
                 <p className="text-sm mb-1">
@@ -84,13 +78,11 @@ export default function RecentRequests() {
                 </p>
 
                 <p className="text-sm mb-1">
-                  <span className="font-semibold">Date:</span>{" "}
-                  {r.donationDate}
+                  <span className="font-semibold">Date:</span> {r.donationDate}
                 </p>
 
                 <p className="text-sm mb-4 capitalize">
-                  <span className="font-semibold">Status:</span>{" "}
-                  {r.status}
+                  <span className="font-semibold">Status:</span> {r.status}
                 </p>
 
                 <Link

@@ -1,4 +1,3 @@
-// src/pages/dashboard/ProfilePage.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -6,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../Contexts/AuthProvider";
 
 export default function ProfilePage() {
-  const { user } = useAuth(); // only Firebase user
-  const [profile, setProfile] = useState(null); // local profile state
+  const { user } = useAuth();
+  const [profile, setProfile] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -16,52 +15,70 @@ export default function ProfilePage() {
     bloodGroup: "",
     district: "",
     upazila: "",
+    lastDonationDate: "",
   });
+
   const [editing, setEditing] = useState(false);
 
-  // Load profile from backend
+  /* ================= DATE FORMAT ================= */
+  const formatDate = (date) => {
+    if (!date) return "Not donated yet";
+    return new Date(date).toLocaleDateString("en-GB");
+  };
+
+  /* ================= LOAD PROFILE ================= */
   useEffect(() => {
     const loadProfile = async () => {
       if (!user?.uid) return;
+
       try {
         const res = await axios.get(
-          `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`
+          `http://localhost:5000/api/users/${user.uid}`
         );
-        setProfile(res.data); // now includes role and status
+
+        if (!res.data) return;
+
+        setProfile(res.data);
+
         setForm({
-          name: res.data.name || user?.displayName || "",
-          email: res.data.email || user?.email || "",
+          name: res.data.name || "",
+          email: res.data.email || "",
           avatarUrl: res.data.avatarUrl || "",
           bloodGroup: res.data.bloodGroup || "",
           district: res.data.district || "",
           upazila: res.data.upazila || "",
+          lastDonationDate: res.data.lastDonationDate
+            ? res.data.lastDonationDate.split("T")[0]
+            : "",
         });
       } catch (err) {
         console.error("Failed to load profile:", err);
       }
     };
+
     loadProfile();
   }, [user]);
 
+  /* ================= FORM CHANGE ================= */
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  /* ================= SAVE ================= */
   const onSave = async () => {
     try {
-      await axios.patch(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`,
-        {
-          name: form.name,
-          avatarUrl: form.avatarUrl,
-          bloodGroup: form.bloodGroup,
-          district: form.district,
-          upazila: form.upazila,
-        }
-      );
+      await axios.patch(`http://localhost:5000/api/users/${user.uid}`, {
+        name: form.name,
+        avatarUrl: form.avatarUrl,
+        bloodGroup: form.bloodGroup,
+        district: form.district,
+        upazila: form.upazila,
+        lastDonationDate: form.lastDonationDate || null,
+      });
+
       toast.success("Profile updated");
       setEditing(false);
-      // reload profile after save
+
       const res = await axios.get(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`
+        `http://localhost:5000/api/users/${user.uid}`
       );
       setProfile(res.data);
     } catch (err) {
@@ -69,11 +86,14 @@ export default function ProfilePage() {
     }
   };
 
+  /* ================= UI ================= */
   return (
     <div className="max-w-3xl mx-auto bg-white rounded shadow p-6">
       <ToastContainer position="top-right" autoClose={2500} />
+
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">My profile</h2>
+        <h2 className="text-xl font-bold">My Profile</h2>
+
         {!editing ? (
           <button
             className="px-4 py-2 bg-gray-900 text-white rounded"
@@ -93,7 +113,7 @@ export default function ProfilePage() {
 
       <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-gray-600">Name</label>
+          <label className="block text-sm">Name</label>
           <input
             name="name"
             value={form.name}
@@ -104,11 +124,8 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Email (read-only)
-          </label>
+          <label className="block text-sm">Email</label>
           <input
-            name="email"
             value={form.email}
             disabled
             className="w-full px-3 py-2 border rounded bg-gray-100"
@@ -116,7 +133,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm text-gray-600">Avatar URL</label>
+          <label className="block text-sm">Avatar URL</label>
           <input
             name="avatarUrl"
             value={form.avatarUrl}
@@ -127,7 +144,7 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">Blood group</label>
+          <label className="block text-sm">Blood Group</label>
           <select
             name="bloodGroup"
             value={form.bloodGroup}
@@ -148,7 +165,7 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">District</label>
+          <label className="block text-sm">District</label>
           <input
             name="district"
             value={form.district}
@@ -159,7 +176,7 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">Upazila</label>
+          <label className="block text-sm">Upazila</label>
           <input
             name="upazila"
             value={form.upazila}
@@ -168,14 +185,32 @@ export default function ProfilePage() {
             className="w-full px-3 py-2 border rounded"
           />
         </div>
+
+        {/* 🔥 LAST DONATION DATE FIELD */}
+        <div>
+          <label className="block text-sm">Last Donation Date</label>
+          <input
+            type="date"
+            name="lastDonationDate"
+            value={form.lastDonationDate}
+            onChange={onChange}
+            disabled={!editing}
+            className="w-full px-3 py-2 border rounded"
+          />
+        </div>
       </form>
 
-      <div className="mt-6 text-sm text-gray-600">
+      {/* ================= EXTRA INFO ================= */}
+      <div className="mt-6 text-sm space-y-1">
         <p>
-          <span className="font-semibold">Role:</span> {profile?.role}
+          <strong>Role:</strong> {profile?.role}
         </p>
         <p>
-          <span className="font-semibold">Status:</span> {profile?.status}
+          <strong>Status:</strong> {profile?.status}
+        </p>
+        <p>
+          <strong>Last Donation:</strong>{" "}
+          {formatDate(profile?.lastDonationDate)}
         </p>
       </div>
     </div>

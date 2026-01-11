@@ -31,12 +31,9 @@ export default function SearchPage() {
     setSearched(true);
 
     try {
-      const res = await axios.get(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/search-donors",
-        {
-          params: { bloodGroup, district, upazila },
-        }
-      );
+      const res = await axios.get("http://localhost:5000/api/search-donors", {
+        params: { bloodGroup, district, upazila },
+      });
       setDonors(res.data || []);
     } catch (err) {
       console.error(err);

@@ -14,12 +14,9 @@ export default function MyDonationRequests() {
   useEffect(() => {
     const load = async () => {
       if (!user?.uid) return;
-      const res = await axios.get(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/requests",
-        {
-          params: { uid: user.uid, status, page, limit }, // ✅ use user.uid
-        }
-      );
+      const res = await axios.get("http://localhost:5000/api/requests", {
+        params: { uid: user.uid, status, page, limit }, // ✅ use user.uid
+      });
       setData(res.data.items || []);
       setTotal(res.data.total || 0);
     };

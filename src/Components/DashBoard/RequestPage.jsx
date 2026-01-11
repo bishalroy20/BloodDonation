@@ -10,7 +10,7 @@ export default function RequestsPage() {
     const load = async () => {
       try {
         const res = await axios.get(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/public/requests"
+          "http://localhost:5000/api/public/requests"
         );
         setRequests(res.data || []);
       } catch (err) {

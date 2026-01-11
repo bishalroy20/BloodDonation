@@ -18,17 +18,34 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden sm:flex items-center space-x-6">
-          <Link to="/requests" className="hover:text-gray-200">Donation requests</Link>
-          <Link to="/blogs" className="hover:text-gray-200">Blogs</Link>
+          <Link to="/requests" className="hover:text-gray-200">
+            Donation requests
+          </Link>
+
+          <Link
+            to="/dashboard/create-donation-request"
+            className="hover:text-gray-200"
+          >
+            Create Donation
+          </Link>
+          <Link to="/blogs" className="hover:text-gray-200">
+            Blogs
+          </Link>
 
           {!user ? (
             <>
-              <Link to="/login" className="hover:text-gray-200">Login</Link>
-              <Link to="/register" className="hover:text-gray-200">Join as donor</Link>
+              <Link to="/login" className="hover:text-gray-200">
+                Login
+              </Link>
+              <Link to="/register" className="hover:text-gray-200">
+                Join as donor
+              </Link>
             </>
           ) : (
             <>
-              <Link to="/funding" className="hover:text-gray-200">Funding</Link>
+              <Link to="/funding" className="hover:text-gray-200">
+                Funding
+              </Link>
 
               {/* Avatar dropdown */}
               <div className="relative">
@@ -37,7 +54,10 @@ export default function Navbar() {
                   className="flex items-center gap-2 bg-red-700 px-3 py-1 rounded"
                 >
                   <img
-                    src={profile?.avatarUrl || "https://ui-avatars.com/api/?name=User"}
+                    src={
+                      profile?.avatarUrl ||
+                      "https://ui-avatars.com/api/?name=User"
+                    }
                     alt="avatar"
                     className="w-6 h-6 rounded-full"
                   />
@@ -55,8 +75,11 @@ export default function Navbar() {
                       Dashboard
                     </Link>
                     <button
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                      onClick={() => { signOutUser(); setMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        signOutUser();
+                        setMenuOpen(false);
+                      }}
                     >
                       Logout
                     </button>
@@ -128,8 +151,11 @@ export default function Navbar() {
                 Dashboard
               </Link>
               <button
-                onClick={() => { signOutUser(); setIsOpen(false); }}
-                className="block w-full text-left py-2 border-b border-red-200"
+                onClick={() => {
+                  signOutUser();
+                  setIsOpen(false);
+                }}
+                className="block w-full text-left py-2 border-b border-red-200 cursor-pointer"
               >
                 Logout
               </button>

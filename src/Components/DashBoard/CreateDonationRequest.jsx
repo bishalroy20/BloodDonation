@@ -87,15 +87,12 @@ export default function CreateDonationRequest() {
     if (!isDateTimeValid()) return;
 
     try {
-      await axios.post(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/requests",
-        {
-          requesterUid: user.uid,
-          requesterName: profile?.name,
-          requesterEmail: profile?.email,
-          ...form,
-        }
-      );
+      await axios.post("http://localhost:5000/api/requests", {
+        requesterUid: user.uid,
+        requesterName: profile?.name,
+        requesterEmail: profile?.email,
+        ...form,
+      });
 
       toast.success("Donation request created successfully");
 
@@ -118,18 +115,14 @@ export default function CreateDonationRequest() {
   return (
     <div className="bg-white rounded shadow p-6 max-w-4xl mx-auto">
       <ToastContainer position="top-right" autoClose={2500} />
-      <h2 className="text-xl font-semibold mb-6">
-        Create Donation Request
-      </h2>
+      <h2 className="text-xl font-semibold mb-6">Create Donation Request</h2>
 
       <form
         onSubmit={onSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         <div>
-          <label className="block text-sm text-gray-600">
-            Requester Name
-          </label>
+          <label className="block text-sm text-gray-600">Requester Name</label>
           <input
             value={profile?.name || ""}
             readOnly
@@ -138,9 +131,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Requester Email
-          </label>
+          <label className="block text-sm text-gray-600">Requester Email</label>
           <input
             value={profile?.email || ""}
             readOnly
@@ -149,9 +140,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm text-gray-600">
-            Recipient Name
-          </label>
+          <label className="block text-sm text-gray-600">Recipient Name</label>
           <input
             name="recipientName"
             value={form.recipientName}
@@ -202,9 +191,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Hospital Name
-          </label>
+          <label className="block text-sm text-gray-600">Hospital Name</label>
           <input
             name="hospitalName"
             value={form.hospitalName}
@@ -215,9 +202,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Full Address
-          </label>
+          <label className="block text-sm text-gray-600">Full Address</label>
           <input
             name="addressLine"
             value={form.addressLine}
@@ -228,9 +213,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Blood Group
-          </label>
+          <label className="block text-sm text-gray-600">Blood Group</label>
           <select
             name="bloodGroup"
             value={form.bloodGroup}
@@ -251,9 +234,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Donation Date
-          </label>
+          <label className="block text-sm text-gray-600">Donation Date</label>
           <input
             type="date"
             name="donationDate"
@@ -266,9 +247,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600">
-            Donation Time
-          </label>
+          <label className="block text-sm text-gray-600">Donation Time</label>
           <input
             type="time"
             name="donationTime"
@@ -280,9 +259,7 @@ export default function CreateDonationRequest() {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm text-gray-600">
-            Request Message
-          </label>
+          <label className="block text-sm text-gray-600">Request Message</label>
           <textarea
             name="requestMessage"
             value={form.requestMessage}

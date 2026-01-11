@@ -4,30 +4,7 @@ import axios from "axios";
 import { useAuth } from "../../Contexts/AuthProvider";
 
 export default function AdminHome() {
-  const { profile } = useAuth();
-  const [stats, setStats] = useState({ donors: 0, funding: 0, requests: 0 });
-
-  useEffect(() => {
-    const load = async () => {
-      const [d, f, r] = await Promise.all([
-        axios.get(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/stats/total-donors"
-        ),
-        axios.get(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/stats/total-funding"
-        ),
-        axios.get(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/stats/total-requests"
-        ),
-      ]);
-      setStats({
-        donors: d.data.total,
-        funding: f.data.total,
-        requests: r.data.total,
-      });
-    };
-    load();
-  }, []);
+  
 
   return (
     <div className="space-y-6">
@@ -42,42 +19,9 @@ export default function AdminHome() {
       </div>
 
       {/* Stats cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard
-          icon="🫶"
-          title="Total donors"
-          value={stats.donors}
-          color="bg-red-600"
-        />
-        <StatCard
-          icon="💰"
-          title="Total funding"
-          value={`৳ ${stats.funding}`}
-          color="bg-emerald-600"
-        />
-        <StatCard
-          icon="🩸"
-          title="Total requests"
-          value={stats.requests}
-          color="bg-indigo-600"
-        />
-      </div>
+      
     </div>
   );
 }
 
-function StatCard({ icon, title, value, color }) {
-  return (
-    <div className="bg-white rounded shadow p-6 flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-500">{title}</p>
-        <p className="text-2xl font-bold mt-1">{value}</p>
-      </div>
-      <div
-        className={`w-12 h-12 ${color} text-white rounded flex items-center justify-center text-xl`}
-      >
-        {icon}
-      </div>
-    </div>
-  );
-}
+

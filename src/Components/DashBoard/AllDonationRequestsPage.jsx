@@ -15,13 +15,10 @@ export default function AllDonationRequestsPage() {
   const load = async () => {
     try {
       const token = user?.token || (await user.getIdToken?.());
-      const res = await axios.get(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/admin/requests",
-        {
-          params: { status, page, limit },
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.get("http://localhost:5000/api/admin/requests", {
+        params: { status, page, limit },
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setData(res.data.items);
       setTotal(res.data.total);
     } catch (err) {
@@ -40,7 +37,7 @@ export default function AllDonationRequestsPage() {
     try {
       const token = user?.token || (await user.getIdToken?.());
       await axios.patch(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/admin/requests/${id}/status`,
+        `http://localhost:5000/api/admin/requests/${id}/status`,
         { status: next },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -56,12 +53,9 @@ export default function AllDonationRequestsPage() {
     if (!window.confirm("Delete this request?")) return;
     try {
       const token = user?.token || (await user.getIdToken?.());
-      await axios.delete(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/admin/requests/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`http://localhost:5000/api/admin/requests/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       toast.success("Request deleted");
       load();
     } catch (err) {

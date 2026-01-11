@@ -32,7 +32,7 @@ function FundingForm({ onSuccess }) {
     setLoading(true);
     try {
       const { data } = await axios.post(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/funding/create-intent",
+        "http://localhost:5000/api/funding/create-intent",
         { amount },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -52,7 +52,7 @@ function FundingForm({ onSuccess }) {
         result.paymentIntent.status === "succeeded"
       ) {
         await axios.post(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/funding/record",
+          "http://localhost:5000/api/funding/record",
           { amount },
           {
             headers: {
@@ -111,12 +111,9 @@ export default function FundingPage() {
   }
 
   const load = async () => {
-    const { data } = await axios.get(
-      "https://blood-donation-server-gilt-theta.vercel.app/api/funding",
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
+    const { data } = await axios.get("http://localhost:5000/api/funding", {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     setItems(data || []);
   };
 

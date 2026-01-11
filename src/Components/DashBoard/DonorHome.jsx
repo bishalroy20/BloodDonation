@@ -11,17 +11,36 @@ export default function DonorHome() {
   const [recent, setRecent] = useState([]);
   const [profile, setProfile] = useState(null);
 
+  // const { profile } = useAuth();
+  const [stats, setStats] = useState({ donors: 0, funding: 0, requests: 0 });
+
+  useEffect(() => {
+    const load = async () => {
+      const [d, f, r] = await Promise.all([
+        axios.get("http://localhost:5000/api/stats/total-donors"),
+        axios.get("http://localhost:5000/api/stats/total-funding"),
+        axios.get("http://localhost:5000/api/stats/total-requests"),
+      ]);
+      setStats({
+        donors: d.data.total,
+        funding: f.data.total,
+        requests: r.data.total,
+      });
+    };
+    load();
+  }, []);
+
   useEffect(() => {
     const loadData = async () => {
       if (!user?.uid) return;
       try {
         const profileRes = await axios.get(
-          `https://blood-donation-server-gilt-theta.vercel.app/api/users/${user.uid}`
+          `http://localhost:5000/api/users/${user.uid}`
         );
         setProfile(profileRes.data);
 
         const requestsRes = await axios.get(
-          "https://blood-donation-server-gilt-theta.vercel.app/api/requests",
+          "http://localhost:5000/api/requests",
           {
             params: { uid: user.uid, page: 1, limit: 3 },
           }
@@ -37,7 +56,7 @@ export default function DonorHome() {
   const updateStatus = async (id, next) => {
     try {
       await axios.patch(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`,
+        `http://localhost:5000/api/requests/${id}`,
         { status: next },
         {
           headers: { Authorization: `Bearer ${user?.token}` },
@@ -57,12 +76,9 @@ export default function DonorHome() {
     try {
       const token = await user.getIdToken();
 
-      await axios.delete(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`http://localhost:5000/api/requests/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setRecent((prev) => prev.filter((r) => r._id !== id));
       toast.success("Request deleted");
@@ -82,9 +98,6 @@ export default function DonorHome() {
           Manage your recent donation requests below.
         </p>
       </div>
-
-      
-
 
       {/* Recent requests */}
       {recent.length > 0 && (
@@ -249,6 +262,27 @@ export default function DonorHome() {
         </div>
       )}
 
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard
+          icon="🫶"
+          title="Total donors"
+          value={stats.donors}
+          color="bg-red-600"
+        />
+        <StatCard
+          icon="💰"
+          title="Total funding"
+          value={`৳ ${stats.funding}`}
+          color="bg-emerald-600"
+        />
+        <StatCard
+          icon="🩸"
+          title="Total requests"
+          value={stats.requests}
+          color="bg-indigo-600"
+        />
+      </div> */}
+
       {/* Extra section for admin/volunteer */}
       {(profile?.role === "admin" || profile?.role === "volunteer") && (
         <div className="bg-white rounded shadow p-6">
@@ -258,12 +292,12 @@ export default function DonorHome() {
           <div className="flex flex-col sm:flex-row gap-2">
             {profile.role === "admin" && (
               <>
-                <Link
+                {/* <Link
                   to="/dashboard/admin"
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded text-center"
                 >
                   Admin Home
-                </Link>
+                </Link> */}
                 <Link
                   to="/dashboard/admin/create-blog"
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded text-center"
@@ -287,6 +321,22 @@ export default function DonorHome() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function StatCard({ icon, title, value, color }) {
+  return (
+    <div className="bg-white rounded shadow p-6 flex items-center justify-between">
+      <div>
+        <p className="text-sm text-gray-500">{title}</p>
+        <p className="text-2xl font-bold mt-1">{value}</p>
+      </div>
+      <div
+        className={`w-12 h-12 ${color} text-white rounded flex items-center justify-center text-xl`}
+      >
+        {icon}
+      </div>
     </div>
   );
 }

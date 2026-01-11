@@ -16,10 +16,11 @@ export default function Home() {
       
       <main className="flex-1">
         <Banner />
-        <RecentBlogsSlider />
+        
         <Featured />
         <BloodDonationInfoSection />
         <RecentRequests />
+        <RecentBlogsSlider />
         <ContactUs />
         <StatsSection />
       </main>

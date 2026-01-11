@@ -28,7 +28,7 @@ export default function Login() {
 
       // Call backend to issue JWT
       const { data } = await axios.post(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/auth/issue-token",
+        "http://localhost:5000/api/auth/issue-token",
         {
           uid: user.uid,
           email: user.email,

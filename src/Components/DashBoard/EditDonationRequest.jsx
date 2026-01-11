@@ -38,9 +38,7 @@ export default function EditDonationRequest() {
   useEffect(() => {
     if (id) {
       axios
-        .get(
-          `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`
-        )
+        .get(`http://localhost:5000/api/requests/${id}`)
         .then((res) => {
           setForm(res.data);
           const selected = districts.find(
@@ -75,13 +73,9 @@ export default function EditDonationRequest() {
     }
 
     try {
-      await axios.patch(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`,
-        form,
-        {
-          headers: { Authorization: `Bearer ${user?.token}` },
-        }
-      );
+      await axios.patch(`http://localhost:5000/api/requests/${id}`, form, {
+        headers: { Authorization: `Bearer ${user?.token}` },
+      });
       toast.success("Donation request updated successfully");
       navigate("/dashboard/my-donation-requests");
     } catch (err) {

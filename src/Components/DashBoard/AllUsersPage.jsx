@@ -13,9 +13,7 @@ export default function AllUsersPage() {
 
   const loadUsers = async () => {
     try {
-      const res = await axios.get(
-        "https://blood-donation-server-gilt-theta.vercel.app/api/users"
-      );
+      const res = await axios.get("http://localhost:5000/api/users");
       let allUsers = res.data || [];
 
       if (statusFilter) {
@@ -41,18 +39,16 @@ export default function AllUsersPage() {
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const updateStatus = async (id, nextStatus) => {
-    await axios.patch(
-      `https://blood-donation-server-gilt-theta.vercel.app/api/users/${id}/status`,
-      { status: nextStatus }
-    );
+    await axios.patch(`http://localhost:5000/api/users/${id}/status`, {
+      status: nextStatus,
+    });
     loadUsers();
   };
 
   const updateRole = async (id, nextRole) => {
-    await axios.patch(
-      `https://blood-donation-server-gilt-theta.vercel.app/api/users/${id}/role`,
-      { role: nextRole }
-    );
+    await axios.patch(`http://localhost:5000/api/users/${id}/role`, {
+      role: nextRole,
+    });
     loadUsers();
   };
 

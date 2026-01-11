@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
         try {
           // ✅ Fetch profile from backend using Firebase UID
           const res = await axios.get(
-            `https://blood-donation-server-gilt-theta.vercel.app/api/users/${currentUser.uid}`
+            `http://localhost:5000/api/users/${currentUser.uid}`
           );
           setProfile(res.data); // should include { name, email, role, status }
         } catch (err) {

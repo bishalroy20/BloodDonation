@@ -17,9 +17,7 @@ export default function RequestDetailsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get(
-          `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`
-        );
+        const res = await axios.get(`http://localhost:5000/api/requests/${id}`);
         setRequest(res.data);
       } catch (err) {
         console.error(err);
@@ -30,19 +28,14 @@ export default function RequestDetailsPage() {
 
   const confirmDonation = async () => {
     try {
-      await axios.patch(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}/confirm`,
-        {
-          donorName: profile?.name || user.displayName,
-          donorEmail: profile?.email || user.email,
-        }
-      );
+      await axios.patch(`http://localhost:5000/api/requests/${id}/confirm`, {
+        donorName: profile?.name || user.displayName,
+        donorEmail: profile?.email || user.email,
+      });
       alert("Donation confirmed! Status changed to inprogress.");
       setShowModal(false);
       // reload request
-      const res = await axios.get(
-        `https://blood-donation-server-gilt-theta.vercel.app/api/requests/${id}`
-      );
+      const res = await axios.get(`http://localhost:5000/api/requests/${id}`);
       setRequest(res.data);
     } catch (err) {
       alert(err?.response?.data?.message || "Failed to confirm donation");
