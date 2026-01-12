@@ -65,10 +65,28 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
+
+    //past date or error
+    if (form.lastDonationDate) {
+      const selectedDate = new Date(form.lastDonationDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate > today) {
+        toast.error("❌ Last donation date cannot be in the future");
+        return;
+      }
+    }
+
+
     if (form.password !== form.confirm_password) {
       setMsg("Passwords do not match");
       return;
     }
+
+
+
 
     try {
       // Firebase register

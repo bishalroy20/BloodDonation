@@ -193,6 +193,7 @@ export default function ProfilePage() {
             type="date"
             name="lastDonationDate"
             value={form.lastDonationDate}
+            max={new Date().toISOString().split("T")[0]} //no future date
             onChange={onChange}
             disabled={!editing}
             className="w-full px-3 py-2 border rounded"

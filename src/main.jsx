@@ -38,6 +38,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "/search-donors", element: <SearchPage /> },
       { path: "/requests", element: <RequestsPage /> },
+      { path: "/requests/:id", element: <RequestDetailsPage /> },
       { path: "/blogs", element: <BlogList /> },
       { path: "/blogs/:id", element: <BlogDetails /> },
 
@@ -80,7 +81,7 @@ const router = createBrowserRouter([
              { path:"/dashboard/requests/:id/edit" , element: <EditDonationRequest /> }, 
             ],
           },
-          { path: "/requests/:id", element: <RequestDetailsPage /> },
+          
           { path: "/funding" , element: <FundingPage /> },
         ],
       },

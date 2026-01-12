@@ -18,13 +18,13 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden sm:flex items-center space-x-6">
-          <Link to="/requests" className="hover:text-gray-200">
+          <Link to="/requests" className="hover:text-gray-200 cursor-pointer">
             Donation requests
           </Link>
 
           <Link
             to="/dashboard/create-donation-request"
-            className="hover:text-gray-200"
+            className="hover:text-gray-200 cursor-pointer"
           >
             Create Donation
           </Link>
@@ -43,9 +43,9 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/funding" className="hover:text-gray-200">
+              {/* <Link to="/funding" className="hover:text-gray-200">
                 Funding
-              </Link>
+              </Link> */}
 
               {/* Avatar dropdown */}
               <div className="relative">

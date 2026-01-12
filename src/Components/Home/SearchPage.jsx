@@ -1,4 +1,3 @@
-// src/pages/SearchPage.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -9,36 +8,67 @@ export default function SearchPage() {
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
   const [donors, setDonors] = useState([]);
-  const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Load districts from local JSON
+  // 🔹 Load districts
   useEffect(() => {
     fetch("/districts.json")
       .then((res) => res.json())
-      .then(setDistricts)
-      .catch(() => console.error("Failed to load districts"));
+      .then(setDistricts);
   }, []);
 
-  // Update upazilas when district changes
+  // 🔹 Load ALL donors initially
+  useEffect(() => {
+    loadAllDonors();
+  }, []);
+
+  const loadAllDonors = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        "http://localhost:5000/api/search-donors"
+      );
+      setDonors(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🔹 Update upazilas
   useEffect(() => {
     const selected = districts.find((d) => d.name === district);
     setUpazilas(selected ? selected.upazilas : []);
     setUpazila("");
   }, [district, districts]);
 
+  // 🔹 Search
   const handleSearch = async (e) => {
     e.preventDefault();
-    setSearched(true);
 
     try {
-      const res = await axios.get("http://localhost:5000/api/search-donors", {
-        params: { bloodGroup, district, upazila },
-      });
-      setDonors(res.data || []);
+      setLoading(true);
+      const res = await axios.get(
+        "http://localhost:5000/api/search-donors",
+        {
+          params: { bloodGroup, district, upazila },
+        }
+      );
+      setDonors(res.data);
     } catch (err) {
       console.error(err);
-      setDonors([]);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // 🔹 Reset filter
+  const handleReset = () => {
+    setBloodGroup("");
+    setDistrict("");
+    setUpazila("");
+    loadAllDonors();
   };
 
   return (
@@ -48,13 +78,11 @@ export default function SearchPage() {
       {/* Search form */}
       <form
         onSubmit={handleSearch}
-        className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+        className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8"
       >
-        {/* Blood group */}
         <select
           value={bloodGroup}
           onChange={(e) => setBloodGroup(e.target.value)}
-          required
           className="px-3 py-2 border rounded"
         >
           <option value="">Blood group</option>
@@ -68,11 +96,9 @@ export default function SearchPage() {
           <option>O-</option>
         </select>
 
-        {/* District */}
         <select
           value={district}
           onChange={(e) => setDistrict(e.target.value)}
-          required
           className="px-3 py-2 border rounded"
         >
           <option value="">District</option>
@@ -83,11 +109,9 @@ export default function SearchPage() {
           ))}
         </select>
 
-        {/* Upazila */}
         <select
           value={upazila}
           onChange={(e) => setUpazila(e.target.value)}
-          required
           className="px-3 py-2 border rounded"
         >
           <option value="">Upazila</option>
@@ -104,17 +128,21 @@ export default function SearchPage() {
         >
           Search
         </button>
+
+        <button
+          type="button"
+          onClick={handleReset}
+          className="px-6 py-2 bg-red-700 text-white rounded hover:bg-red-500"
+        >
+          Reset
+        </button>
       </form>
 
       {/* Results */}
-      {!searched && (
-        <p className="text-gray-600">
-          Fill the form and click search to see donors.
-        </p>
-      )}
+      {loading && <p>Loading donors...</p>}
 
-      {searched && donors.length === 0 && (
-        <p className="text-gray-600">No donors found for your criteria.</p>
+      {!loading && donors.length === 0 && (
+        <p className="text-gray-600">No donors found.</p>
       )}
 
       {donors.length > 0 && (
@@ -136,7 +164,7 @@ export default function SearchPage() {
                   <td className="p-2">{d.bloodGroup}</td>
                   <td className="p-2">{d.district}</td>
                   <td className="p-2">{d.upazila}</td>
-                  <td className="p-2">{d.phone || d.email}</td>
+                  <td className="p-2">{d.email}</td>
                 </tr>
               ))}
             </tbody>

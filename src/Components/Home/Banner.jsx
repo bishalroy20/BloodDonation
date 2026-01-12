@@ -20,7 +20,7 @@ export default function Banner() {
           </Link>
           <Link
             to="/search-donors"
-            className="px-6 py-3 border border-red-600 text-red-600 rounded hover:bg-red-50"
+           className="px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700"
           >
             Search donors
           </Link>

@@ -289,36 +289,36 @@ export default function DonorHome() {
           <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-4">
             Management Links
           </h3>
-          <div className="flex flex-col sm:flex-row gap-2">
-            {profile.role === "admin" && (
-              <>
-                {/* <Link
-                  to="/dashboard/admin"
-                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded text-center"
-                >
-                  Admin Home
-                </Link> */}
-                <Link
-                  to="/dashboard/admin/create-blog"
-                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded text-center"
-                >
-                  Write Blog
-                </Link>
-                <Link
-                  to="/dashboard/all-users"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded text-center"
-                >
-                  Manage All Users
-                </Link>
-              </>
-            )}
-            <Link
-              to="/dashboard/all-blood-donation-request"
-              className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded text-center"
-            >
-              View All Donation Requests
-            </Link>
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {profile.role === "admin" && (
+    <>
+      <Link
+        to="/dashboard/admin/create-blog"
+        className="flex flex-col items-center justify-center p-6 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition transform hover:scale-105"
+      >
+        <span className="text-3xl mb-2">✍️</span>
+        <span className="font-semibold text-center">Write Blog</span>
+      </Link>
+
+      <Link
+        to="/dashboard/all-users"
+        className="flex flex-col items-center justify-center p-6 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition transform hover:scale-105"
+      >
+        <span className="text-3xl mb-2">👥</span>
+        <span className="font-semibold text-center">Manage All Users</span>
+      </Link>
+    </>
+  )}
+
+  <Link
+    to="/dashboard/all-blood-donation-request"
+    className="flex flex-col items-center justify-center p-6 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition transform hover:scale-105"
+  >
+    <span className="text-3xl mb-2">🩸</span>
+    <span className="font-semibold text-center">View All Donation Requests</span>
+  </Link>
+</div>
+
         </div>
       )}
     </div>

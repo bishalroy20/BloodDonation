@@ -3,12 +3,14 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Firebase/firebase.init";
 import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false); //  toggle state
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +46,25 @@ export default function Login() {
       console.error(err);
       setMsg("Invalid email or password");
     }
+  };
+
+
+  const handleLogin = async (email, password) => {
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success("✅ Login successful");
+      navigate("/");
+    } catch (err) {
+      toast.error("❌ Invalid credentials");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ DEMO LOGIN
+  const handleDemoLogin = () => {
+    handleLogin("demo@blood.com", "12345678");
   };
 
   return (
@@ -104,6 +125,14 @@ export default function Login() {
           >
             Login
           </button>
+
+           <button
+          onClick={handleDemoLogin}
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          🚀 Login as Demo User
+        </button>
         </form>
 
         {/* Extra links */}
